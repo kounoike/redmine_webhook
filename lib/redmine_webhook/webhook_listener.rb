@@ -58,6 +58,9 @@ module RedmineWebhook
           begin
             Faraday.post do |req|
               req.url webhook.url
+              if req.url.user || req.url.pass
+                req.basic_auth(req.url.user, req.url.pass)
+              end
               req.headers['Content-Type'] = 'application/json'
               req.body = request_body
             end
